@@ -7,7 +7,6 @@
 ## 🎮 Live Demo
 
 🔗 **Play Here: https://retrosnakeremake.vercel.app**
-(Add your deployed link here)
 
 ---
 
@@ -28,7 +27,7 @@ the architecture simple and scalable.
 - ⌨️ Arrow key controls
 - 🐍 Dynamic snake movement and growth
 - 🍎 Random food generation
-- 💥 Collision detection (walls & self)
+- 💥 Collision detection
 - 📊 Live score tracking
 - 🔄 Game reset functionality
 - 🎨 Minimal and responsive UI
