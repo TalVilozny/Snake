@@ -26,7 +26,6 @@ export default function Snake() {
   const [startTime, setStartTime] = useState(() => Date.now());
   const [endTime, setEndTime] = useState(null);
 
-  // Helper to place food not on the snake
   const spawnFood = (body) => {
     while (true) {
       const x = Math.floor(Math.random() * COLS);
@@ -38,13 +37,11 @@ export default function Snake() {
     }
   };
 
-  // Helper to calculate gradient color for snake segments
   const getSnakeColor = (index, totalLength) => {
-    // Head color (lightest) - #17c257
     const headColor = { r: 0x17, g: 0xc2, b: 0x57 };
-    // Second segment color - #14a84b (as specified)
+
     const secondColor = { r: 0x14, g: 0xa8, b: 0x4b };
-    // Tail color (darkest)
+
     const tailColor = { r: 0x0a, g: 0x5a, b: 0x2a };
 
     if (index === 0) {
@@ -55,14 +52,10 @@ export default function Snake() {
       return "#14a84b";
     }
 
-    // For longer snakes, interpolate between second color and tail color
-    // Index 1 should be secondColor, last index should be tailColor
     const segmentFactor = totalLength > 2 ? (index - 1) / (totalLength - 2) : 0;
 
-    // Use square root for smoother gradient transition
     const factor = Math.sqrt(segmentFactor);
 
-    // Interpolate between second color and tail color
     const r = Math.round(
       secondColor.r + (tailColor.r - secondColor.r) * factor,
     );
@@ -76,11 +69,9 @@ export default function Snake() {
     return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
   };
 
-  // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        // Toggle pause
         setIsPaused((prev) => !prev);
       } else if (e.key === "ArrowUp" && !isPaused) {
         setPressedKey("ArrowUp");
@@ -95,7 +86,6 @@ export default function Snake() {
         setPressedKey("ArrowRight");
         if (direction.x !== -1) setNextDirection({ x: 1, y: 0 });
       } else if (e.key === " " && gameOver) {
-        // Space to restart
         restartGame();
       }
     };
@@ -119,7 +109,6 @@ export default function Snake() {
     };
   }, [direction, gameOver, isPaused]);
 
-  // Main game loop
   useEffect(() => {
     if (!isRunning || gameOver || isPaused) return;
 
@@ -132,13 +121,11 @@ export default function Snake() {
           y: head.y + nextDirection.y,
         };
 
-        // Wrap around walls instead of dying
         if (newHead.x < 0) newHead.x = COLS - 1;
         if (newHead.x >= COLS) newHead.x = 0;
         if (newHead.y < 0) newHead.y = ROWS - 1;
         if (newHead.y >= ROWS) newHead.y = 0;
 
-        // Self collision
         const hitsSelf = prevBody.some(
           (seg) => seg.x === newHead.x && seg.y === newHead.y,
         );
@@ -150,10 +137,8 @@ export default function Snake() {
           return prevBody;
         }
 
-        // Move snake
         let newBody;
         if (newHead.x === food.x && newHead.y === food.y) {
-          // Eat food: grow
           newBody = [newHead, ...prevBody];
           const newFood = spawnFood(newBody);
           setFood(newFood);
@@ -162,7 +147,6 @@ export default function Snake() {
           newBody = [newHead, ...prevBody.slice(0, -1)];
         }
 
-        // Victory: snake fills the entire board
         if (newBody.length === COLS * ROWS) {
           setGameOver(true);
           setIsRunning(false);
@@ -177,24 +161,19 @@ export default function Snake() {
     return () => clearInterval(interval);
   }, [nextDirection, isRunning, gameOver, isPaused, food]);
 
-  // Drawing
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    // Clear
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Optional: draw grid background
     ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw food
     ctx.fillStyle = "#f73e25";
     ctx.fillRect(food.x * CELL_SIZE, food.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 
-    // Draw snake with gradient
     snakeBody.forEach((seg, index) => {
       ctx.fillStyle = getSnakeColor(index, snakeBody.length);
       ctx.fillRect(seg.x * CELL_SIZE, seg.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
