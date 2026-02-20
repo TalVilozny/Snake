@@ -71,12 +71,17 @@ export default function Snake() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Prevent page scroll with arrows/space
+      const key = e.key.toLowerCase();
+      // Prevent page scroll with arrows/WASD/space
       if (
         e.key === "ArrowUp" ||
         e.key === "ArrowDown" ||
         e.key === "ArrowLeft" ||
         e.key === "ArrowRight" ||
+        key === "w" ||
+        key === "a" ||
+        key === "s" ||
+        key === "d" ||
         e.key === " "
       ) {
         e.preventDefault();
@@ -87,22 +92,22 @@ export default function Snake() {
 
       if (e.key === "Escape") {
         setIsPaused((prev) => !prev);
-      } else if (e.key === "ArrowUp" && !isPaused) {
+      } else if ((e.key === "ArrowUp" || key === "w") && !isPaused) {
         setPressedKey("ArrowUp");
         if (direction.y !== 1 && nextDirection.y !== 1) {
           setNextDirection({ x: 0, y: -1 });
         }
-      } else if (e.key === "ArrowDown" && !isPaused) {
+      } else if ((e.key === "ArrowDown" || key === "s") && !isPaused) {
         setPressedKey("ArrowDown");
         if (direction.y !== -1 && nextDirection.y !== -1) {
           setNextDirection({ x: 0, y: 1 });
         }
-      } else if (e.key === "ArrowLeft" && !isPaused) {
+      } else if ((e.key === "ArrowLeft" || key === "a") && !isPaused) {
         setPressedKey("ArrowLeft");
         if (direction.x !== 1 && nextDirection.x !== 1) {
           setNextDirection({ x: -1, y: 0 });
         }
-      } else if (e.key === "ArrowRight" && !isPaused) {
+      } else if ((e.key === "ArrowRight" || key === "d") && !isPaused) {
         setPressedKey("ArrowRight");
         if (direction.x !== -1 && nextDirection.x !== -1) {
           setNextDirection({ x: 1, y: 0 });
@@ -113,11 +118,16 @@ export default function Snake() {
     };
 
     const handleKeyUp = (e) => {
+      const key = e.key.toLowerCase();
       if (
         e.key === "ArrowUp" ||
         e.key === "ArrowDown" ||
         e.key === "ArrowLeft" ||
-        e.key === "ArrowRight"
+        e.key === "ArrowRight" ||
+        key === "w" ||
+        key === "a" ||
+        key === "s" ||
+        key === "d"
       ) {
         setPressedKey(null);
       }
@@ -230,7 +240,7 @@ export default function Snake() {
           <h1 className="SnakeTitle">Snake</h1>
           <div className="SnakeInfo">
             <span className="SnakeScore">Score: {score}</span>
-            <span className="SnakeHint">Use arrow keys to move</span>
+            <span className="SnakeHint">Use arrow keys or WASD to move</span>
           </div>
         </div>
         <div className="SnakeBoardWrapper">
