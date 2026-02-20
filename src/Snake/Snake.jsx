@@ -71,20 +71,42 @@ export default function Snake() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // Prevent page scroll with arrows/space
+      if (
+        e.key === "ArrowUp" ||
+        e.key === "ArrowDown" ||
+        e.key === "ArrowLeft" ||
+        e.key === "ArrowRight" ||
+        e.key === " "
+      ) {
+        e.preventDefault();
+      }
+
+      // Ignore auto‑repeat so holding a key doesn't spam direction changes
+      if (e.repeat) return;
+
       if (e.key === "Escape") {
         setIsPaused((prev) => !prev);
       } else if (e.key === "ArrowUp" && !isPaused) {
         setPressedKey("ArrowUp");
-        if (direction.y !== 1) setNextDirection({ x: 0, y: -1 });
+        if (direction.y !== 1 && nextDirection.y !== 1) {
+          setNextDirection({ x: 0, y: -1 });
+        }
       } else if (e.key === "ArrowDown" && !isPaused) {
         setPressedKey("ArrowDown");
-        if (direction.y !== -1) setNextDirection({ x: 0, y: 1 });
+        if (direction.y !== -1 && nextDirection.y !== -1) {
+          setNextDirection({ x: 0, y: 1 });
+        }
       } else if (e.key === "ArrowLeft" && !isPaused) {
         setPressedKey("ArrowLeft");
-        if (direction.x !== 1) setNextDirection({ x: -1, y: 0 });
+        if (direction.x !== 1 && nextDirection.x !== 1) {
+          setNextDirection({ x: -1, y: 0 });
+        }
       } else if (e.key === "ArrowRight" && !isPaused) {
         setPressedKey("ArrowRight");
-        if (direction.x !== -1) setNextDirection({ x: 1, y: 0 });
+        if (direction.x !== -1 && nextDirection.x !== -1) {
+          setNextDirection({ x: 1, y: 0 });
+        }
       } else if (e.key === " " && gameOver) {
         restartGame();
       }

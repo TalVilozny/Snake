@@ -166,6 +166,7 @@
 .KeyButton.pressed {
   background-color: hsl(0, 0%, 0%, 60%);
   border: 2px solid hsl(0, 0%, 43%, 60%);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
 }
 
 .LeftArrow {
